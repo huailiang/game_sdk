@@ -99,6 +99,24 @@ extern "C"
         return TransferCode(nsstr.carrierName);
     }
 
+
+    void  ToJPG(const char* path, Byte* bytes,int len)
+    {
+    	Byte byte[] =bytes;
+    	NSData *adata = [[NSData alloc] initWithBytes:byte length:len];
+
+		NSString *imageFilePath = [NSString stringWithUTF8String:path];
+
+		// 将取得的图片写入本地的沙盒中，其中0.5表示压缩比例，1表示不压缩，数值越小压缩比例越大
+		BOOL success = [UIImageJPEGRepresentation(image, 1) writeToFile:imageFilePath  atomically:YES];
+		if (success)
+		{
+		    NSLog(@"写入本地成功");
+		}
+    }
+
+
+
 #if defined (__cplusplus)  
 }
 #endif

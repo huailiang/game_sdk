@@ -23,7 +23,7 @@ public class NativeBridge
     private static extern string CheckSIM();
 
     [DllImport("__Internal")]
-    private static extern void ToJPG();
+    private static extern void ToJPG(string path, byte[] bytes,int length);
 
 
 
@@ -60,7 +60,7 @@ public class NativeBridge
         AndroidJavaClass jc = new AndroidJavaClass("com.tencent.tmgp.dragonnest.SystemInfoActivity");
         jc.CallStatic("ToJPG", path, bytes);
 #elif UNITY_IOS
-         ToJPG();
+         ToJPG(path,bytes,bytes.Length);
          Debug.Log("ios ToJPG: " + path);
 #endif
     }
