@@ -17,6 +17,12 @@ public class Main : MonoBehaviour
 
     void Start()
     {
+        string ppath = Application.dataPath.Substring(0, Application.dataPath.LastIndexOf("/"));
+        string[] fs = Directory.GetFiles(ppath + "/Mods", "*.projmods", SearchOption.AllDirectories);
+        foreach (string file in fs)
+        {
+            Debug.Log(file);
+        }
         Debug.Log("save path: " + Application.temporaryCachePath);
         StartCoroutine(DownloadHander());
         //ForTest();
