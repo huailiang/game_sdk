@@ -1,6 +1,6 @@
-**/XProject/Android/
-**/XProject/Win32/
-**/XProject/IOS/
+**/Android/
+**/Win32/
+**/xcode_proj/
 
 **/UnityVS/
 **/UnityVS.meta

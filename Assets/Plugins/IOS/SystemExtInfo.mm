@@ -100,10 +100,11 @@ extern "C"
     }
 
 
-    void  ToJPG(const char* path, Byte* bytes,int len)
+    //用于 gif 转 jpg
+    void  ToJPG(const char* path, Byte byte[],int len)
     {
-    	Byte byte[] =bytes;
     	NSData *adata = [[NSData alloc] initWithBytes:byte length:len];
+        UIImage *image=[UIImage imageWithData:adata];
 
 		NSString *imageFilePath = [NSString stringWithUTF8String:path];
 
