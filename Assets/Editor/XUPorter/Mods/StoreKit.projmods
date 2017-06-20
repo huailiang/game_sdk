@@ -1,0 +1,10 @@
+{
+    "group": "Store",
+    "libs": [],
+    "frameworks": ["StoreKit.framework",
+    				"CoreTelephony.framework"],
+    "headerpaths": [],                    
+    "files":   ["iOS/Store/libStoreKit.a"],
+    "folders": [],    
+    "excludes": ["^.*.meta$", "^.*.mdown$", "^.*.pdf$"]
+}
