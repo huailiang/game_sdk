@@ -18,8 +18,7 @@ public class Main : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("save path: " + Application.temporaryCachePath);
-        StartCoroutine(DownloadHander());
+      //  StartCoroutine(DownloadHander());
     }
     
 

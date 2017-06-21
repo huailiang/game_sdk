@@ -10,7 +10,7 @@ public sealed class PostProcessBuildEditor
     static void OnBuildingEnd(BuildTarget target, string path)
     {
         ProjectSettingIOS ps = null;
-#if !UNITY_IOS //tencent
+#if UNITY_IOS //tencent
             ps = new ProjectSettingIOS_Tencent();
 #endif
 

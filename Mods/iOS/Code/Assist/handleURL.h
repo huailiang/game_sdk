@@ -2,7 +2,7 @@
 //  externFs.h
 //  Unity-iPhone
 //
-//  Created by 李新民 on 11/10/14.
+//  Created by 彭怀亮 on 17/06/14.
 //
 
 #if defined (SYS_IOS)
