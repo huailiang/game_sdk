@@ -3,10 +3,6 @@
 
 // #include "SDKConfig.h"
 
-#ifndef JoyYouSDK_MARK
-#error "Error Config Macros"
-#endif
-
 
 #ifdef PLUGIN_NEWGAMEPAD
 #define PLUGIN_ID_NEWGAMEPAD
