@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Editor/BuildEditor/Base/PostProcessBuildEditor.cs.meta
 guid: 311fed4a0b127b14fb63741148a28bec
 timeCreated: 1498027892
+=======
+guid: bde89f58ac0d34fa88cb3512ae8e90bb
+timeCreated: 1498026712
+>>>>>>> 69eb250afaf9022347565ea8cee3cfe2fc4bd564:Assets/Editor/BuildEditor/Base/PostProcessBuildEditor.cs.meta
 licenseType: Pro
 MonoImporter:
   serializedVersion: 2
