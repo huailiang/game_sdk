@@ -8,11 +8,7 @@ public class NativeBridge
 
     public static NativeBridge sington
     {
-        get
-        {
-            if (_s == null) _s = new NativeBridge();
-            return _s;
-        }
+        get { if (_s == null) _s = new NativeBridge(); return _s; }
     }
 
 
@@ -23,39 +19,49 @@ public class NativeBridge
     private static extern string CheckSIM();
 
     [DllImport("__Internal")]
-    private static extern void ToJPG(string path, byte[] bytes,int length);
+    private static extern void ToJPG(string path, byte[] bytes, int length);
 
 
 
-    public void NGetDensity()
+    public int NGetDensity()
     {
-#if UNITY_ANDROID
+        int density = 200;
+#if UNITY_EDITOR
+        Debug.Log("NGetDensity called");
+#elif UNITY_ANDROID
         AndroidJavaClass jc = new AndroidJavaClass("com.tencent.tmgp.dragonnest.SystemInfoActivity");
-        int density = jc.CallStatic<int>("GetDensity");
+        density = jc.CallStatic<int>("GetDensity");
         Debug.Log("android density is: " + density);
 #elif UNITY_IOS
-         int density = GetDensity();
+         density = GetDensity();
          Debug.Log("ios density is: " + density);
 #endif
+        return density;
     }
 
 
-    public void NCheckSIM()
+    public string NCheckSIM()
     {
-#if UNITY_ANDROID
+        string str = "";
+#if UNITY_EDITOR
+        Debug.Log("NCheckSIM called");
+# elif UNITY_ANDROID
         AndroidJavaClass jc = new AndroidJavaClass("com.tencent.tmgp.dragonnest.SystemInfoActivity");
-        string str = jc.CallStatic<string>("CheckSIM");
+        str = jc.CallStatic<string>("CheckSIM");
         Debug.Log("androidCheckSIM: " + str);
 #elif UNITY_IOS
-          string str = CheckSIM();
+          str = CheckSIM();
           Debug.Log("ios CheckSIM: " + str);
 #endif
+        return str;
     }
 
 
     public void NToJPG(string path, byte[] bytes)
     {
-#if UNITY_ANDROID
+#if UNITY_EDITOR
+        Debug.Log("NToJPG called");
+#elif UNITY_ANDROID
         Debug.Log("androidToJPG: " + path);
         AndroidJavaClass jc = new AndroidJavaClass("com.tencent.tmgp.dragonnest.SystemInfoActivity");
         jc.CallStatic("ToJPG", path, bytes);

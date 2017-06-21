@@ -2,14 +2,13 @@
 using UnityEngine;
 using UnityEditor.iOS.Xcode;
 
-public class ProjectSettings4IOS_Tencent : ProjectSettingIOS
+public class ProjectSettingIOS_Tencent : ProjectSettingIOS
 {
 
     public override void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
     {
         base.OnPostProcessBuild(target, pathToBuiltProject);
         EditProj(pathToBuiltProject);
-       
     }
 
 
@@ -62,16 +61,13 @@ public class ProjectSettings4IOS_Tencent : ProjectSettingIOS
     public override void WritePlistFile(string path)
     {
         base.WritePlistFile(path);
-
         XCPlist list = new XCPlist(path);
-
         // 允许HTTP通信协议
         AddATSSection(ref list);
-
         InitTencentAttribute ita = typeof(XSDK).GetCustomAttribute<InitTencentAttribute>(false);
         if (ita == null)
         {
-            Debug.LogError("InitTencentAttribute not found.");
+            Debug.LogError("InitTencentAttribute not found." + " log: " + ita.logEnable);
             return;
         }
 
@@ -84,7 +80,6 @@ public class ProjectSettings4IOS_Tencent : ProjectSettingIOS
         AddStringKVPair(ref list, "NSPhotoLibraryUsageDescription", "是否允许此App使用你的媒体资料库？");
         // 添加蓝牙访问权限
         AddStringKVPair(ref list, "NSBluetoothPeripheralUsageDescription", "是否允许此App使用你的蓝牙？");
-
         // 游戏不支持竖屏，需要勾选全屏选项
         AddBooleanKVPair(ref list, "UIRequiresFullScreen", true);
 
