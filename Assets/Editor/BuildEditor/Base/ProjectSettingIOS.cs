@@ -77,6 +77,7 @@ public class ProjectSettingIOS :ProjectSetting
 
     public override void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
     {
+        base.OnPostProcessBuild(target, pathToBuiltProject);
         WritePlistFile(pathToBuiltProject);
         AddExtCode(pathToBuiltProject);
     }
