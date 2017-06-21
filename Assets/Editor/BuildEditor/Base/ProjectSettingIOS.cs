@@ -3,6 +3,7 @@ using UnityEditor;
 using System.Text;
 using System.Collections.Generic;
 
+
 public class IOSURLTypeItem
 {
     public string URLName { get; set; }
@@ -73,6 +74,12 @@ public class URLTypesSection
 
 public class ProjectSettingIOS :ProjectSetting
 {
+
+    public override void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject)
+    {
+        WritePlistFile(pathToBuiltProject);
+        AddExtCode(pathToBuiltProject);
+    }
 
 
     public void PostProcessBuild(BuildTarget target, string pathToBuiltProject)

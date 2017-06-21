@@ -9,7 +9,7 @@ public class ProjectSettings4IOS_Tencent : ProjectSettingIOS
     {
         base.OnPostProcessBuild(target, pathToBuiltProject);
         EditProj(pathToBuiltProject);
-        AddExtCode(pathToBuiltProject);
+       
     }
 
 
