@@ -83,6 +83,8 @@ public class Main : MonoBehaviour
         Sprite tempSprite = new Sprite();
         tempSprite = Sprite.Create(m_Tex, new Rect(0, 0, m_Tex.width, m_Tex.height), Vector2.zero);
         m_imgObj.GetComponent<Image>().sprite = tempSprite;
+
+        www.Dispose();
     }
 
 
