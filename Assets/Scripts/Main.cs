@@ -34,7 +34,7 @@ public class Main : MonoBehaviour
         yield return www;
         File.WriteAllBytes(Application.temporaryCachePath + "/" + png.GetHashCode(), www.bytes);
         type = Util.sington.GetTypeByBytes(www.bytes);
-        print("type2:ss" + type);
+        print("type2:" + type);
 
         www = new WWW(jpg);
         yield return www;
