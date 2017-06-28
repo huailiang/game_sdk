@@ -24,31 +24,18 @@
 	<uses-permission android:name="android.permission.RESTART_PACKAGES" />
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   
-	<!-- 登录上报时需要带设备名称，通过蓝牙模块来获取设备名称 -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 	<uses-permission android:name="android.permission.READ_LOGS" />
 
-	<!-- 信鸽推送需要的其他权限 -->
-	<uses-permission android:name="android.permission.BROADCAST_STICKY" />
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
-	<uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-
 	<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-
 	<uses-permission android:name="android.permission.RECORD_AUDIO" />
-
 	<uses-permission android:name="android.permission.BATTERY_STATS" />
 
     <uses-sdk
@@ -83,8 +70,19 @@
                 android:value="false" />
         </activity>
 
+      <activity
+        android:name="com.tencent.tmgp.dragonnest.Test"
+        android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale"
+        android:label="dragonnest"
+        android:launchMode="singleTop"
+        android:screenOrientation="sensorLandscape" >
+
+        <meta-data
+            android:name="unityplayer.UnityActivity"
+            android:value="true" />
+    </activity>
+
 	
-	    <!--小鸟手柄Service End-->
     </application>
 
     <uses-feature
@@ -92,14 +90,6 @@
 
     <uses-feature
         android:name="android.hardware.touchscreen"
-        android:required="false" />
-
-    <uses-feature
-        android:name="android.hardware.touchscreen.multitouch"
-        android:required="false" />
-
-    <uses-feature
-        android:name="android.hardware.touchscreen.multitouch.distinct"
         android:required="false" />
 
 </manifest>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PlatformSettings>
+    <WorkEnv name="Unity3D" />
+	<AndroidSDK>
+		<ThirdPlatform current="korean">
+		    <Platform name="xiaomi" className="com.joyyou.common.Xiaomi.XiaomiSDKImpl"  version=""/>
+			<Platform name="UC" className="com.joyyou.common.UC.UCSDKImpl" version="" />
+			<Platform name="wandoujia" className="com.joyyou.common.wdj.wandoujiaSDKImpl" version="" />
+			<Platform name="muzhiwan" className="com.joyyou.common.mzw.muzhiwanSDKImpl" version="" />
+			<Platform name="huawei" className="com.joyyou.common.huawei.huaweiSDKImpl" version="" />
+			<Platform name="qihoo360" className="com.joyyou.common.qihoo360.SDK360Impl" version="" />
+			<Platform name="huanlesdk" className="com.joyyou.common.Huanle.HuanleSDKImpl" version="" />
+			<Platform name="oppo" className="com.joyyou.common.oppo.OppoSDKImpl" version="" />
+			<Platform name="tencent_msdk" className="com.joyyou.common.TencentMSDK.TencentMSDKImpl" version="" />
+			<Platform name="baidu91" className="com.joyyou.common.Baidu91.Baidu91Impl" version="" />
+			<Platform name="downjoy" className="com.joyyou.common.downjoy.DownjoySDKImpl" version="" />
+			<Platform name="meizu" className="com.joyyou.common.meizu.MeizuSDKImpl" version="" />
+			<Platform name="4399" className="com.joyyou.common.m4399.M4399SDKImpl" version="" />
+			<Platform name="huanle" className="com.joyyou.common.Huanle.HuanleSDKImpl" version="" cpsid="xinyou_rxsn_1"/>
+			<Platform name="korean" className="com.joyyou.common.Korean.KoreanImpl" version="" userCfg="rexuesaonian.info.kr"/>
+		</ThirdPlatform>
+		<AdvPlatform>
+		</AdvPlatform>
+		<StatisticsSuppose current="all">
+		    <Statistical name="talkingData" className="com.joyyou.statistics.TalkingData.TalkingDateStatisticalData" version="" />
+		    <!--<Statistical name="TencentCloud" className="com.joyyou.statistics.TencentCloud.TencentCloudImpl"/> -->
+		    <!--<Statistical name="google" className="com.joyyou.components.Google.GoogleAdvImpl" version="" />    -->
+		    <!--<Statistical name="baidu" className="com.joyyou.components.Google.GoogleAdvImpl" /> -->
+		</StatisticsSuppose>
+		<Components>
+		    <GameRecord current="RecNow">
+				<GR name="RecNow" className="com.joyyou.components.RecNow.RecNowImpl" version="" />
+			</GameRecord>
+			<AdTracking current="all">
+			    <ADT name="inmobi" className="com.joyyou.components.inmobi.inmobiImpl" version="" />
+			</AdTracking>
+			<GamePad current="newGamepad">
+			    <GP name="newGamepad" className="com.joyyou.device.gamepad.newGame" />
+			</GamePad>
+		</Components>
+		<CustomPayment current="all">
+		    <CP name="unionpay" className="com.joyyou.customPay.UnionPayImpl" version="" />
+		    <CP name="alipay" className="com.joyyou.customPay.HuanleAliPay" version="" />
+		</CustomPayment>
+		<InAppPurchase current="Korean">
+		    <IAP name="Korean">
+		    	<OrderBackup name="rexuesaonian.iap.kr.bak"/>
+			    <OrderVerification current="onestore" >
+			        <OV name="onestore"  keyData="" url="http://sg.dev.huanle.com/mapi/pay_notify.php?pf=facebook&amp;g=rexie" />
+			        <OV name="google" keyData="" url="http://sg.dev.huanle.com/mapi/pay_notify.php?pf=facebook&amp;g=rexie" />
+					<OV name="naver" keyData="" url="http://sg.dev.huanle.com/mapi/pay_notify.php?pf=facebook&amp;g=rexie" />
+			    </OrderVerification>
+			 </IAP>
+		</InAppPurchase>
+	</AndroidSDK>
+</PlatformSettings>

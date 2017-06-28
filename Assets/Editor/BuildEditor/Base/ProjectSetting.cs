@@ -1,9 +1,12 @@
-﻿using UnityEditor;
-using UnityEngine;
-
-public class ProjectSetting
+﻿
+namespace UnityEditor.XBuild
 {
 
-    public virtual void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject) { }
+    public class ProjectSetting
+    {
+
+        public virtual void OnPostProcessBuild(BuildTarget target, string pathToBuiltProject) { }
+
+    }
 
 }

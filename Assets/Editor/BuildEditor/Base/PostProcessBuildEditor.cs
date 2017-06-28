@@ -3,32 +3,36 @@ using System.Collections;
 using UnityEditor.Callbacks;
 using UnityEditor;
 
-public sealed class PostProcessBuildEditor
+
+namespace UnityEditor.XBuild
 {
 
-    [PostProcessBuild]
-    static void OnBuildingEnd(BuildTarget target, string path)
+    public sealed class PostProcessBuildEditor
     {
-        ProjectSettingIOS ps = null;
+
+        [PostProcessBuild]
+        static void OnBuildingEnd(BuildTarget target, string path)
+        {
+            ProjectSettingIOS ps = null;
 #if UNITY_IOS //tencent
             ps = new ProjectSettingIOS_Tencent();
 #endif
 
-        if (ps == null)
-        {
-            Debug.LogError("No platform matched, please check it!");
-            return;
+            if (ps == null)
+            {
+                Debug.LogError("No platform matched, please check it!");
+                return;
+            }
+
+            ps.PostProcessBuild(target, path);
+
+            // string autoPackageScriptPath = Path.Combine(path, "build.sh");
+            // CreatePackageScript(autoPackageScriptPath);
+            // RunPackageScript(autoPackageScriptPath);
+
+            Debug.Log("Build Task over !");
         }
-
-        ps.PostProcessBuild(target, path);
-
-        // string autoPackageScriptPath = Path.Combine(path, "build.sh");
-        // CreatePackageScript(autoPackageScriptPath);
-        // RunPackageScript(autoPackageScriptPath);
-
-        Debug.Log("Build Task over !");
     }
-
 
 
 }

@@ -29,8 +29,9 @@ public class NativeBridge
 #if UNITY_EDITOR
         Debug.Log("NGetDensity called");
 #elif UNITY_ANDROID
-        AndroidJavaClass jc = new AndroidJavaClass("com.tencent.tmgp.dragonnest.SystemInfoActivity");
-        density = jc.CallStatic<int>("GetDensity");
+        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+        density = jo.Call<int>("GetDensity");
         Debug.Log("android density is: " + density);
 #elif UNITY_IOS
          density = GetDensity();
@@ -46,8 +47,9 @@ public class NativeBridge
 #if UNITY_EDITOR
         Debug.Log("NCheckSIM called");
 # elif UNITY_ANDROID
-        AndroidJavaClass jc = new AndroidJavaClass("com.tencent.tmgp.dragonnest.SystemInfoActivity");
-        str = jc.CallStatic<string>("CheckSIM");
+        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+        str = jo.Call<string>("CheckSIM");
         Debug.Log("androidCheckSIM: " + str);
 #elif UNITY_IOS
           str = CheckSIM();
@@ -63,13 +65,17 @@ public class NativeBridge
         Debug.Log("NToJPG called");
 #elif UNITY_ANDROID
         Debug.Log("androidToJPG: " + path);
-        AndroidJavaClass jc = new AndroidJavaClass("com.tencent.tmgp.dragonnest.SystemInfoActivity");
-        jc.CallStatic("ToJPG", path, bytes);
+        AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+        jo.Call("ToJPG", path, bytes);
 #elif UNITY_IOS
          ToJPG(path,bytes,bytes.Length);
          Debug.Log("ios ToJPG: " + path);
 #endif
     }
+
+
+
 
 
 }
