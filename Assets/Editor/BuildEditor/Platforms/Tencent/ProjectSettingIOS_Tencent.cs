@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿#if UNITY_IOS
+
+using UnityEditor;
 using UnityEngine;
 using UnityEditor.iOS.Xcode;
 
@@ -189,3 +191,5 @@ namespace UnityEditor.XBuild
         
     }
 }
+
+#endif
