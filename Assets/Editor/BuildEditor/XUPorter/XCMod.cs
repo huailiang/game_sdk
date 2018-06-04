@@ -76,8 +76,10 @@ namespace UnityEditor.XCodeEditor
 			
 			name = System.IO.Path.GetFileNameWithoutExtension( filename );
 			path = System.IO.Path.GetDirectoryName( filename );
-			
-			string contents = projectFileInfo.OpenText().ReadToEnd();
+
+            StreamReader sr = projectFileInfo.OpenText();
+			string contents = sr.ReadToEnd();
+            sr.Close();
 			_datastore = (Hashtable)MiniJSON.jsonDecode( contents );
 		}
 	}
