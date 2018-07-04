@@ -66,8 +66,32 @@ namespace UnityEditor.XCodeEditor
 				return (ArrayList)_datastore["excludes"];
 			}
 		}
-		
-		public XCMod( string filename )
+
+        public ArrayList compiler_flags
+        {
+            get
+            {
+                return (ArrayList)_datastore["compiler_flags"];
+            }
+        }
+
+        public ArrayList linker_flags
+        {
+            get
+            {
+                return (ArrayList)_datastore["linker_flags"];
+            }
+        }
+
+        public ArrayList embed_binaries
+        {
+            get
+            {
+                return (ArrayList)_datastore["embed_binaries"];
+            }
+        }
+
+        public XCMod( string filename )
 		{	
 			FileInfo projectFileInfo = new FileInfo( filename );
 			if( !projectFileInfo.Exists ) {

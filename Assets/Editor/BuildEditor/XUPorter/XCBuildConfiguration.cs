@@ -7,10 +7,13 @@ namespace UnityEditor.XCodeEditor
 	{
 		protected const string BUILDSETTINGS_KEY = "buildSettings";
 		protected const string HEADER_SEARCH_PATHS_KEY = "HEADER_SEARCH_PATHS";
-		protected const string LIBRARY_SEARCH_PATHS_KEY = "LIBRARY_SEARCH_PATHS";
+        protected const string FRAMEWORK_SEARCH_PATHS_KEY = "FRAMEWORK_SEARCH_PATHS";
+        protected const string LIBRARY_SEARCH_PATHS_KEY = "LIBRARY_SEARCH_PATHS";
 		protected const string OTHER_C_FLAGS_KEY = "OTHER_CFLAGS";
-		
-		public XCBuildConfiguration( string guid, PBXDictionary dictionary ) : base( guid, dictionary )
+        protected const string OTHER_LDFLAGS_KEY = "OTHER_LDFLAGS";
+
+
+        public XCBuildConfiguration( string guid, PBXDictionary dictionary ) : base( guid, dictionary )
 		{
 			
 		}
@@ -69,8 +72,14 @@ namespace UnityEditor.XCodeEditor
 		{
 			return this.AddSearchPaths( paths, LIBRARY_SEARCH_PATHS_KEY, recursive );
 		}
-		
-		public bool AddOtherCFlags( string flag )
+
+        public bool AddFrameworkSearchPaths(PBXList paths, bool recursive = true)
+        {
+            return this.AddSearchPaths(paths, FRAMEWORK_SEARCH_PATHS_KEY, recursive);
+        }
+
+
+        public bool AddOtherCFlags( string flag )
 		{
 			Debug.Log( "INIZIO 1" );
 			PBXList flags = new PBXList();
@@ -106,5 +115,46 @@ namespace UnityEditor.XCodeEditor
 			
 			return modified;
 		}
-	}
+
+        public bool AddOtherLinkerFlags(string flag)
+        {
+            PBXList flags = new PBXList();
+            flags.Add(flag);
+            return AddOtherLinkerFlags(flags);
+        }
+
+        public bool AddOtherLinkerFlags(PBXList flags)
+        {
+            bool modified = false;
+
+            if (!ContainsKey(BUILDSETTINGS_KEY))
+                this.Add(BUILDSETTINGS_KEY, new PBXSortedDictionary());
+
+            foreach (string flag in flags)
+            {
+
+                if (!((PBXDictionary)_data[BUILDSETTINGS_KEY]).ContainsKey(OTHER_LDFLAGS_KEY))
+                {
+                    ((PBXDictionary)_data[BUILDSETTINGS_KEY]).Add(OTHER_LDFLAGS_KEY, new PBXList());
+                }
+                else if (((PBXDictionary)_data[BUILDSETTINGS_KEY])[OTHER_LDFLAGS_KEY] is string)
+                {
+                    string tempString = (string)((PBXDictionary)_data[BUILDSETTINGS_KEY])[OTHER_LDFLAGS_KEY];
+                    ((PBXDictionary)_data[BUILDSETTINGS_KEY])[OTHER_LDFLAGS_KEY] = new PBXList();
+                    if (!string.IsNullOrEmpty(tempString))
+                    {
+                        ((PBXList)((PBXDictionary)_data[BUILDSETTINGS_KEY])[OTHER_LDFLAGS_KEY]).Add(tempString);
+                    }
+                }
+
+                if (!((PBXList)((PBXDictionary)_data[BUILDSETTINGS_KEY])[OTHER_LDFLAGS_KEY]).Contains(flag))
+                {
+                    ((PBXList)((PBXDictionary)_data[BUILDSETTINGS_KEY])[OTHER_LDFLAGS_KEY]).Add(flag);
+                    modified = true;
+                }
+            }
+
+            return modified;
+        }
+    }
 }

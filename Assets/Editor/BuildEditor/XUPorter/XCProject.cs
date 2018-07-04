@@ -241,8 +241,23 @@ namespace UnityEditor.XCodeEditor
 			modified = true;
 			return modified;	
 		}
-		
-		public bool AddHeaderSearchPaths( string path )
+
+        public bool AddOtherLinkerFlags(string flag)
+        {
+            return AddOtherLinkerFlags(new PBXList(flag));
+        }
+
+        public bool AddOtherLinkerFlags(PBXList flags)
+        {
+            foreach (KeyValuePair<string, XCBuildConfiguration> buildConfig in buildConfigurations)
+            {
+                buildConfig.Value.AddOtherLinkerFlags(flags);
+            }
+            modified = true;
+            return modified;
+        }
+
+        public bool AddHeaderSearchPaths( string path )
 		{
 			return AddHeaderSearchPaths( new PBXList( path ) );
 		}
@@ -269,8 +284,23 @@ namespace UnityEditor.XCodeEditor
 			modified = true;
 			return modified;
 		}
-		
-		public object GetObject( string guid )
+
+        public bool AddFrameworkSearchPaths(string path)
+        {
+            return AddFrameworkSearchPaths(new PBXList(path));
+        }
+
+        public bool AddFrameworkSearchPaths(PBXList paths)
+        {
+            foreach (KeyValuePair<string, XCBuildConfiguration> buildConfig in buildConfigurations)
+            {
+                buildConfig.Value.AddFrameworkSearchPaths(paths);
+            }
+            modified = true;
+            return modified;
+        }
+
+        public object GetObject( string guid )
 		{
 			return _objects[guid];
 		}
@@ -321,11 +351,19 @@ namespace UnityEditor.XCodeEditor
 						foreach( KeyValuePair<string, PBXFrameworksBuildPhase> currentObject in frameworkBuildPhases ) {
 							BuildAddFile(fileReference,currentObject,weak);
 						}
-						if ( !string.IsNullOrEmpty( absPath ) && ( tree.CompareTo( "SOURCE_ROOT" ) == 0 ) && File.Exists( absPath ) ) {
-							string libraryPath = Path.Combine( "$(SRCROOT)", Path.GetDirectoryName( filePath ) );
-							this.AddLibrarySearchPaths( new PBXList( libraryPath ) ); 
-						}
-						break;
+                        if (!string.IsNullOrEmpty(absPath) && (tree.CompareTo("SOURCE_ROOT") == 0))
+                        {
+                            string libraryPath = Path.Combine("$(SRCROOT)", Path.GetDirectoryName(filePath));
+                            if (File.Exists(absPath))
+                            {
+                                this.AddLibrarySearchPaths(new PBXList(libraryPath));
+                            }
+                            else
+                            {
+                                this.AddFrameworkSearchPaths(new PBXList(libraryPath));
+                            }
+                        }
+                        break;
 					case "PBXResourcesBuildPhase":
 						foreach( KeyValuePair<string, PBXResourcesBuildPhase> currentObject in resourcesBuildPhases ) {
 							BuildAddFile(fileReference,currentObject,weak);
@@ -519,8 +557,19 @@ namespace UnityEditor.XCodeEditor
 				string absoluteHeaderPath = System.IO.Path.Combine( mod.path, headerpath );
 				this.AddHeaderSearchPaths( absoluteHeaderPath );
 			}
-			
-			this.Consolidate();
+
+            Debug.Log("Adding compiler flags...");
+            foreach (string flag in mod.compiler_flags)
+            {
+                this.AddOtherCFlags(flag);
+            }
+
+            Debug.Log("Adding linker flags...");
+            foreach (string flag in mod.linker_flags)
+            {
+                this.AddOtherLinkerFlags(flag);
+            }
+            this.Consolidate();
 		}
 		
 		#endregion
