@@ -185,10 +185,10 @@ namespace UnityEditor.XBuild
 
             AddExtCode_HandleURL_Modify(pathToBuiltProject);
             AddExtCode_HandleURL_Extend(pathToBuiltProject);
-            AddExtCode_supportOrientation(pathToBuiltProject);
-            AddExtCode_UIView(pathToBuiltProject);
+            // AddExtCode_supportOrientation(pathToBuiltProject);
+            // AddExtCode_UIView(pathToBuiltProject);
         }
-        
+
     }
 }
 

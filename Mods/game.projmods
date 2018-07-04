@@ -6,5 +6,9 @@
     "headerpaths": [],                    
     "files":   [],
     "folders": ["iOS"],    
-    "excludes": ["^.*.meta$", "^.*.mdown$", "^.*.pdf$","^.*.DS_Store$"]
+    "excludes": ["^.*.meta$", "^.*.mdown$", "^.*.pdf$","^.*.DS_Store$"],
+    "compiler_flags": [],
+    "linker_flags": [
+                        "-ObjC"
+                    ]
 }
