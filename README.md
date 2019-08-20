@@ -1,17 +1,3 @@
-
-
-<p align="center">
-     <a href="https://huailiang.github.io/" target="_blank">
-    	<img src="https://huailiang.github.io/img/android.jpeg" width="160" height="140">
-    </a>
-     <a href="https://huailiang.github.io/" target="_blank">
-    	<img src="https://huailiang.github.io/img/ios.jpeg" width="160" height="140">
-    </a>
-    <a href="https://www.unity3d.com" target="_blank">
-    	<img src="https://huailiang.github.io/img/unity.jpeg" width="200" height="150">
-    </a>
-</p>
-
 <b>game_sdk</b>
 
 unity 游戏sdk相关架构设计
