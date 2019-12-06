@@ -13,7 +13,7 @@ extern "C" {
 #endif
 
 
-JNIEXPORT void JNICALL SetAssetManager(JNIEnv *, jobject, jobject);
+JNIEXPORT void JNICALL Java_com_sdk_NativeHelper_SetAssetManager(JNIEnv *, jclass, jobject);
 
 JNIEXPORT int32_t JNICALL ReadAssetsBytes(char *fileName, unsigned char **result);
 

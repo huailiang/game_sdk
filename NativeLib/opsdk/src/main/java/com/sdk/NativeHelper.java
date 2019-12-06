@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Debug;
+import android.content.res.AssetManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -24,13 +25,16 @@ public class NativeHelper
 
     private static Activity gameActivity = null;
     private static Context gameContext = null;
-    private final static String TAG = "XNativeHelper.cpp";
+    private final static String TAG = "XNativeHelper";
+
+    public static native void SetAssetManager(AssetManager assetManager);
 
 
     public static void setGameActivity(Activity activity, Context context)
     {
         gameActivity = activity;
         gameContext = context;
+        SetAssetManager(context.getAssets());
     }
 
     //获取内存

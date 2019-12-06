@@ -21,8 +21,8 @@ extern "C" {
 static AAssetManager *assetManager = nullptr;
 
 
-JNIEXPORT void JNICALL SetAssetManager
-(JNIEnv *env, jobject jobj, jobject jassetManager) {
+JNIEXPORT void JNICALL Java_com_sdk_NativeHelper_SetAssetManager
+(JNIEnv *env, jclass jobj, jobject jassetManager) {
 LOGD("set asset manager");
 assetManager = AAssetManager_fromJava(env, jassetManager);
 }

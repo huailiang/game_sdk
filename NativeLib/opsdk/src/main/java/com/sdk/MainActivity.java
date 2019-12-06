@@ -10,6 +10,10 @@ public class MainActivity extends UnityPlayerActivity
     private final static String TAG = "MainActivity";
     Context mContext = null;
 
+    static{
+        System.loadLibrary("Utility");
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
