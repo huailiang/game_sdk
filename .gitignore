@@ -2,7 +2,9 @@
 **/Win32/
 **/xcode_proj/
 **/.vs/
-**/NativeLib/bin/
+**/.gradle/
+**/.idea/
+**/.cxx/
 
 **/[Ll]ibrary/
 **/[Tt]emp/
