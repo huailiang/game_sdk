@@ -123,6 +123,22 @@ public class Android
         return rst;
     }
 
+    public static void UnZip(string src, string dest = "")
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(dest))
+            {
+                dest = Application.persistentDataPath;
+            }
+            NativeHelper.CallStatic("unZip", src, dest);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError(e.Message);
+        }
+    }
+
 }
 
 

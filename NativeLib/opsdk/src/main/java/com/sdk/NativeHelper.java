@@ -8,17 +8,18 @@ import android.content.res.AssetManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 /**
- *
  * @author penghuailiang
  * native helper for unity3d
- *
  */
 public class NativeHelper
 {
@@ -113,10 +114,12 @@ public class NativeHelper
         }
         finally {
             try {
-                if (instream != null)
+                if (instream != null) {
                     instream.close();
-                if (outStream != null)
+                }
+                if (outStream != null) {
                     outStream.close();
+                }
             }
             catch (Exception e) {
                 MLog.e(TAG, e.getMessage());
@@ -143,14 +146,72 @@ public class NativeHelper
         }
         finally {
             try {
-                if (ins != null)
+                if (ins != null) {
                     ins.close();
+                }
             }
             catch (Exception e) {
                 MLog.e(TAG, e.getMessage());
             }
         }
         return "";
+    }
+
+    /**
+     * zip解压
+     *
+     * @param srcPath  zip源文件
+     * @param unzipath 解压后的目标文件夹
+     * @throws RuntimeException 解压失败会抛出运行时异常
+     */
+
+
+    public static void unZip(String srcPath, String unzipath)
+    {
+        try {
+            byte doc[] = null;
+            MLog.d(TAG, "SRC: " + srcPath);
+            MLog.d(TAG, "DST: " + unzipath);
+            InputStream is = gameContext.getAssets().open(srcPath);
+            ZipInputStream zipis = new ZipInputStream(is);
+            ZipEntry fentry = null;
+            while ((fentry = zipis.getNextEntry()) != null) {
+                if (fentry.isDirectory()) {
+                    File dir = new File(unzipath + fentry.getName());
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+                }
+                else {
+                    //fname是文件名,fileoutputstream与该文件名关联
+                    String fname = new String(unzipath + fentry.getName());
+                    MLog.d(TAG, "unzip: " + fname);
+                    try {
+                        //新建一个out,指向fname，fname是输出地址
+                        FileOutputStream out = new FileOutputStream(fname);
+                        doc = new byte[512];
+                        int n;
+                        //若没有读到，即读取到末尾，则返回-1
+                        while ((n = zipis.read(doc, 0, 512)) != -1) {
+                            //这就把读取到的n个字节全部都写入到指定路径了
+                            out.write(doc, 0, n);
+                        }
+                        is.close();
+                        out.close();
+                        doc = null;
+                    }
+                    catch (Exception ex) {
+                        MLog.e(TAG, "there is a problem");
+                    }
+                }
+            }
+            zipis.close();
+            is.close();
+        }
+        catch (IOException ioex) {
+            MLog.e(TAG, "io错误：" + ioex);
+        }
+        MLog.d(TAG, "finished!");
     }
 
 }

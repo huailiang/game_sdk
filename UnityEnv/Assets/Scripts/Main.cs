@@ -33,33 +33,40 @@ public class Main : MonoBehaviour
 
     private void OnGUI()
     {
-        if (GUI.Button(new Rect(40, 10, 140, 40), "像素密度"))
+        if (GUI.Button(new Rect(60, 10, 140, 40), "像素密度"))
         {
             int density = NativeBridge.sington.NGetDensity();
             m_info.text = "PPI:" + density;
         }
-        if (GUI.Button(new Rect(40, 70, 140, 40), "运营商"))
+        if (GUI.Button(new Rect(60, 70, 140, 40), "运营商"))
         {
             string str = NativeBridge.sington.NCheckSIM();
             m_info.text = "运营商：" + str;
         }
-        if (GUI.Button(new Rect(40, 130, 140, 40), "加载gif"))
+        if (GUI.Button(new Rect(60, 130, 140, 40), "加载gif"))
         {
             StartCoroutine(GifHander());
         }
 #if UNITY_ANDROID
-        if (GUI.Button(new Rect(40, 190, 140, 40), "NDK"))
+        if (GUI.Button(new Rect(60, 190, 140, 40), "NDK"))
         {
             Debug.Log(Android.GetMemory());
             NDKRead("test.txt");
         }
-        if (GUI.Button(new Rect(40, 250, 140, 40), "Streaming"))
+        if (GUI.Button(new Rect(60, 250, 140, 40), "Streaming"))
         {
             string file = "test.txt";
             int code = Android.CopyStreamingAsset(file);
             Debug.Log("code: " + code);
             string txt = Android.LoadSteamString(file);
             Debug.Log(txt);
+        }
+        if (GUI.Button(new Rect(60, 310, 140, 40), "Unzip"))
+        {
+            string src = Application.streamingAssetsPath;
+            src = Path.Combine(src, "lua.zip");
+            Debug.Log(src);
+            Android.UnZip(src, Application.persistentDataPath);
         }
 #endif
     }
