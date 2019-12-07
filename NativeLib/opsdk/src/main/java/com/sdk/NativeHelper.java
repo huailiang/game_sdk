@@ -2,19 +2,17 @@ package com.sdk;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Debug;
 import android.content.res.AssetManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -42,13 +40,15 @@ public class NativeHelper
     public static float GetMemory()
     {
         float memory = -1;
-        try {
+        try
+        {
             int pid = android.os.Process.myPid();
             ActivityManager mActivityManager = (ActivityManager) gameActivity.getSystemService(Context.ACTIVITY_SERVICE);
             Debug.MemoryInfo[] memoryInfoArray = mActivityManager.getProcessMemoryInfo(new int[]{pid});
             memory = (float) memoryInfoArray[0].getTotalPrivateDirty() / 1024;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             MLog.e(TAG, e.toString());
         }
         return memory;
@@ -61,18 +61,21 @@ public class NativeHelper
     public static int CopyStreamingAsset(String src, String dst)
     {
         File dir = new File(dst);
-        if (!dir.exists() || !dir.isDirectory()) {
+        if (!dir.exists() || !dir.isDirectory())
+        {
             dir.mkdir();
         }
         File file = new File(dir, src);
-        try {
-            if (gameContext == null) {
+        try
+        {
+            if (gameContext == null)
+            {
                 MLog.e(TAG, "CONTEXT IS NULL");
                 return -1;
             }
-
             InputStream is = gameContext.getAssets().open(src);
-            if (!is.markSupported()) {
+            if (!is.markSupported())
+            {
                 MLog.e(TAG, "Input is NULL");
                 return -2;
             }
@@ -80,14 +83,16 @@ public class NativeHelper
             byte[] buffer = new byte[1024];
             int len;
 
-            while ((len = is.read(buffer)) != -1) {
+            while ((len = is.read(buffer)) != -1)
+            {
                 os.write(buffer, 0, len);
             }
             os.flush();
             os.close();
             is.close();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             MLog.e(TAG, e.getMessage());
             return -3;
         }
@@ -99,29 +104,37 @@ public class NativeHelper
     {
         InputStream instream = null;
         ByteArrayOutputStream outStream = null;
-        try {
+        try
+        {
             instream = gameContext.getAssets().open(path);
             outStream = new ByteArrayOutputStream();
             byte[] bytes = new byte[4 * 1024];
             int len;
-            while ((len = instream.read(bytes)) != -1) {
+            while ((len = instream.read(bytes)) != -1)
+            {
                 outStream.write(bytes, 0, len);
             }
             return outStream.toByteArray();
         }
-        catch (IOException e) {
+        catch (IOException e)
+        {
             MLog.e(TAG, e.getMessage());
         }
-        finally {
-            try {
-                if (instream != null) {
+        finally
+        {
+            try
+            {
+                if (instream != null)
+                {
                     instream.close();
                 }
-                if (outStream != null) {
+                if (outStream != null)
+                {
                     outStream.close();
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 MLog.e(TAG, e.getMessage());
             }
             System.gc();
@@ -132,86 +145,124 @@ public class NativeHelper
     public static String LoadSteamString(String path)
     {
         InputStream ins = null;
-        try {
+        try
+        {
             ins = gameContext.getAssets().open(path);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             int idx = -1;
-            while ((idx = ins.read()) != -1) {
+            while ((idx = ins.read()) != -1)
+            {
                 os.write(idx);
             }
             return os.toString();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             MLog.e(TAG, e.getMessage());
         }
-        finally {
-            try {
-                if (ins != null) {
+        finally
+        {
+            try
+            {
+                if (ins != null)
+                {
                     ins.close();
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 MLog.e(TAG, e.getMessage());
             }
         }
         return "";
     }
 
-    /**
-     * zip解压
-     *
-     * @param srcPath  zip源文件
-     * @param unzipath 解压后的目标文件夹
-     * @throws RuntimeException 解压失败会抛出运行时异常
-     */
-
-
-    public static void unZip(String srcPath, String unzipath)
+    public static void UnZip(final String asset, final String output, final boolean isReWrite)
     {
-        try {
-            byte doc[] = null;
-            MLog.d(TAG, "SRC: " + srcPath);
-            MLog.d(TAG, "DST: " + unzipath);
-            InputStream is = gameContext.getAssets().open(srcPath);
-            ZipInputStream zipis = new ZipInputStream(is);
-            ZipEntry fentry = null;
-            while ((fentry = zipis.getNextEntry()) != null) {
-                if (fentry.isDirectory()) {
-                    File dir = new File(unzipath + fentry.getName());
-                    if (!dir.exists()) {
-                        dir.mkdirs();
-                    }
+        final ProgressDialog dialog = new ProgressDialog(gameActivity);
+        dialog.setTitle("提示");
+        dialog.setMessage("正在解压文件，请稍后！");
+        dialog.show();//显示对话框
+        new Thread()
+        {
+            public void run()
+            {
+                try
+                {
+                    UnZipAssets(asset, output, isReWrite);
                 }
-                else {
-                    //fname是文件名,fileoutputstream与该文件名关联
-                    String fname = new String(unzipath + fentry.getName());
-                    MLog.d(TAG, "unzip: " + fname);
-                    try {
-                        //新建一个out,指向fname，fname是输出地址
-                        FileOutputStream out = new FileOutputStream(fname);
-                        doc = new byte[512];
-                        int n;
-                        //若没有读到，即读取到末尾，则返回-1
-                        while ((n = zipis.read(doc, 0, 512)) != -1) {
-                            //这就把读取到的n个字节全部都写入到指定路径了
-                            out.write(doc, 0, n);
-                        }
-                        is.close();
-                        out.close();
-                        doc = null;
-                    }
-                    catch (Exception ex) {
-                        MLog.e(TAG, "there is a problem");
-                    }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                finally
+                {
+                    dialog.cancel();
                 }
             }
-            zipis.close();
-            is.close();
-        }
-        catch (IOException ioex) {
-            MLog.e(TAG, "io错误：" + ioex);
-        }
-        MLog.d(TAG, "finished!");
+        }.start();
     }
 
+    /**
+     * 解压assets的zip压缩文件到指定目录
+     *
+     * @param assetName压缩文件名
+     * @param outputDirectory输出目录
+     * @param isReWrite是否覆盖
+     * @throws IOException
+     */
+    private static void UnZipAssets(String assetName,
+                                    String outputDirectory, boolean isReWrite) throws IOException
+    {
+        //创建解压目标目录
+        File file = new File(outputDirectory);
+        //如果目标目录不存在，则创建
+        if (!file.exists())
+        {
+            file.mkdirs();
+        }
+        InputStream inputStream = gameContext.getAssets().open(assetName);
+        ZipInputStream zipInputStream = new ZipInputStream(inputStream);
+        //读取一个进入点
+        ZipEntry zipEntry = zipInputStream.getNextEntry();
+        //使用1Mbuffer
+        byte[] buffer = new byte[1024 * 1024];
+        //解压时字节计数
+        int count = 0;
+        //如果进入点为空说明已经遍历完所有压缩包中文件和目录
+        while (zipEntry != null)
+        {
+            //如果是一个目录
+            if (zipEntry.isDirectory())
+            {
+                file = new File(outputDirectory + File.separator + zipEntry.getName());
+                //文件需要覆盖或者是文件不存在
+                if (isReWrite || !file.exists())
+                {
+                    file.mkdir();
+                }
+            }
+            else
+            {
+                //如果是文件
+                file = new File(outputDirectory + File.separator
+                        + zipEntry.getName());
+                //文件需要覆盖或者文件不存在，则解压文件
+                if (isReWrite || !file.exists())
+                {
+                    file.createNewFile();
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                    while ((count = zipInputStream.read(buffer)) > 0)
+                    {
+                        fileOutputStream.write(buffer, 0, count);
+                    }
+                    fileOutputStream.close();
+                }
+            }
+            //定位到下一个文件入口
+            zipEntry = zipInputStream.getNextEntry();
+        }
+        zipInputStream.close();
+        inputStream.close();
+    }
 }

@@ -2,6 +2,7 @@ package com.sdk;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import com.unity3d.player.UnityPlayerActivity;
 
 public class MainActivity extends UnityPlayerActivity
@@ -10,7 +11,8 @@ public class MainActivity extends UnityPlayerActivity
     private final static String TAG = "MainActivity";
     Context mContext = null;
 
-    static{
+    static
+    {
         System.loadLibrary("Utility");
     }
 

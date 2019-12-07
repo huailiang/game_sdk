@@ -4,6 +4,7 @@
 **/.gradle/
 **/.idea/
 **/.cxx/
+**/.vscode/
 
 **/[Ll]ibrary/
 **/[Tt]emp/

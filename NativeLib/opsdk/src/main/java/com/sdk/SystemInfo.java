@@ -5,15 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
 import android.util.Log;
+
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
+
 import android.telephony.TelephonyManager;
 
 /**
- *
- * @author hauiliangpeng
+ * @author penghuailiang
  * 这个类是为了获取手机的PPI,运营商信息等功能
- *
  */
 
 public class SystemInfo
@@ -25,7 +25,8 @@ public class SystemInfo
 
     public static SystemInfo getInstance()
     {
-        if (uniqueInstance == null) {
+        if (uniqueInstance == null)
+        {
             uniqueInstance = new SystemInfo();
         }
         return uniqueInstance;
@@ -54,10 +55,12 @@ public class SystemInfo
             if ((operator.equals("46000")) || (operator.equals("46002")))
             {
                 SIMTypeString = "MM";
-            } else if (operator.equals("46001"))
+            }
+            else if (operator.equals("46001"))
             {
                 SIMTypeString = "UN";
-            } else if (operator.equals("46003"))
+            }
+            else if (operator.equals("46003"))
             {
                 SIMTypeString = "DX";
             }
@@ -69,7 +72,8 @@ public class SystemInfo
 
     public void ToJPG(String path, byte[] bytes)
     {
-        try {
+        try
+        {
             Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(path));
             bmp.compress(Bitmap.CompressFormat.JPEG, 80, bos);
@@ -77,7 +81,8 @@ public class SystemInfo
             bos.flush();
             bos.close();
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }

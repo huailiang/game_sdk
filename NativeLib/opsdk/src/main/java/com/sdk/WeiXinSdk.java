@@ -21,10 +21,7 @@ import android.os.Environment;
 import android.widget.Toast;
 
 /**
- *
- * @huailiangpeng
- * 微信相关的实现
- *
+ * @huailiangpeng 微信相关的实现
  */
 public class WeiXinSdk
 {
@@ -174,7 +171,8 @@ public class WeiXinSdk
         {
             msg.title = message;
             msg.description = "蜡笔小新大冒险";
-        } else
+        }
+        else
         {
             msg.title = "蜡笔小新大冒险";
             msg.description = message;
@@ -240,7 +238,8 @@ public class WeiXinSdk
             in.readFully(b);
             in.close();
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             MLog.e(TAG, "readFromFile : errMsg = " + e.getMessage());
             e.printStackTrace();
@@ -254,7 +253,7 @@ public class WeiXinSdk
     {
         if (path != null && !path.equals("") && height > 0 && width > 0)
         {
-            MLog.e(TAG, "PATH: "+path);
+            MLog.e(TAG, "PATH: " + path);
         }
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -292,16 +291,19 @@ public class WeiXinSdk
                 if (beY > beX)
                 {
                     newHeight = (int) (newWidth * 1.0 * options.outHeight / options.outWidth);
-                } else
+                }
+                else
                 {
                     newWidth = (int) (newHeight * 1.0 * options.outWidth / options.outHeight);
                 }
-            } else
+            }
+            else
             {
                 if (beY < beX)
                 {
                     newHeight = (int) (newWidth * 1.0 * options.outHeight / options.outWidth);
-                } else
+                }
+                else
                 {
                     newWidth = (int) (newHeight * 1.0 * options.outWidth / options.outHeight);
                 }
@@ -341,7 +343,8 @@ public class WeiXinSdk
             }
             return bm;
 
-        } catch (final OutOfMemoryError e)
+        }
+        catch (final OutOfMemoryError e)
         {
             MLog.e(TAG, "decode bitmap failed: " + e.getMessage());
             options = null;

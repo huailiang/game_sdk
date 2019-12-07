@@ -19,8 +19,10 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler
     private final static String TAG = "WXEntryActivity";
     Context mContext = null;
     private IWXAPI api;
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         mContext = this;
 
@@ -32,18 +34,21 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler
 
     // 微信发送请求到第三方应用时，会回调到该方法
     @Override
-    public void onReq(BaseReq req) {
+    public void onReq(BaseReq req)
+    {
 
     }
 
     // 第三方应用发送到微信的请求处理后的响应结果，会回调到该方法
     @Override
-    public void onResp(BaseResp resp) {
+    public void onResp(BaseResp resp)
+    {
         String result = " ";
 
-        switch (resp.errCode) {
+        switch (resp.errCode)
+        {
             case BaseResp.ErrCode.ERR_OK:
-                result ="发送成功";
+                result = "发送成功";
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
                 result = "发送取消";

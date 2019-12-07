@@ -3,10 +3,8 @@ package com.sdk;
 import android.util.Log;
 
 /**
- *
- * @author huailiangpeng
+ * @author penghuailiang
  * log的封装实现
- *
  */
 
 public class MLog

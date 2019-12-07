@@ -123,7 +123,7 @@ public class Android
         return rst;
     }
 
-    public static void UnZip(string src, string dest = "")
+    public static void UnZip(string src, string dest = "", bool rewrite)
     {
         try
         {
@@ -131,7 +131,7 @@ public class Android
             {
                 dest = Application.persistentDataPath;
             }
-            NativeHelper.CallStatic("unZip", src, dest);
+            NativeHelper.CallStatic("UnZip", src, dest, rewrite);
         }
         catch (Exception e)
         {
