@@ -2,7 +2,6 @@ package com.sdk;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Debug;
 import android.content.res.AssetManager;
@@ -185,8 +184,6 @@ public class NativeHelper
             {
                 try
                 {
-                    MLog.d(TAG, "output: " + output);
-                    MLog.d(TAG, "asset: " + asset);
                     UnZipAssets(asset, output, isReWrite);
                 }
                 catch (IOException e)
@@ -207,7 +204,6 @@ public class NativeHelper
         {
             file.mkdirs();
         }
-        MLog.d(TAG, "asset: "+assetName);
         InputStream inputStream = gameContext.getAssets().open(assetName);
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
         ZipEntry zipEntry = zipInputStream.getNextEntry();
@@ -215,7 +211,6 @@ public class NativeHelper
         byte[] buffer = new byte[1024 * 1024];
         //解压时字节计数
         int count = 0;
-        MLog.d(TAG, "zipEntry " + (zipEntry != null));
         //如果进入点为空说明已经遍历完所有压缩包中文件和目录
         while (zipEntry != null)
         {
