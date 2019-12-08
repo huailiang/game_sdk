@@ -123,7 +123,7 @@ public class Android
         return rst;
     }
 
-    public static void UnZip(string src, string dest = "", bool rewrite)
+    public static void UnZip(string src, string dest = "", bool rewrite=true)
     {
         try
         {

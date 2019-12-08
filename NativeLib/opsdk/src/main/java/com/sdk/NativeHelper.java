@@ -179,38 +179,24 @@ public class NativeHelper
 
     public static void UnZip(final String asset, final String output, final boolean isReWrite)
     {
-        final ProgressDialog dialog = new ProgressDialog(gameActivity);
-        dialog.setTitle("提示");
-        dialog.setMessage("正在解压文件，请稍后！");
-        dialog.show();//显示对话框
         new Thread()
         {
             public void run()
             {
                 try
                 {
+                    MLog.d(TAG, "output: " + output);
+                    MLog.d(TAG, "asset: " + asset);
                     UnZipAssets(asset, output, isReWrite);
                 }
                 catch (IOException e)
                 {
                     e.printStackTrace();
                 }
-                finally
-                {
-                    dialog.cancel();
-                }
             }
         }.start();
     }
 
-    /**
-     * 解压assets的zip压缩文件到指定目录
-     *
-     * @param assetName压缩文件名
-     * @param outputDirectory输出目录
-     * @param isReWrite是否覆盖
-     * @throws IOException
-     */
     private static void UnZipAssets(String assetName,
                                     String outputDirectory, boolean isReWrite) throws IOException
     {
@@ -221,18 +207,18 @@ public class NativeHelper
         {
             file.mkdirs();
         }
+        MLog.d(TAG, "asset: "+assetName);
         InputStream inputStream = gameContext.getAssets().open(assetName);
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
-        //读取一个进入点
         ZipEntry zipEntry = zipInputStream.getNextEntry();
         //使用1Mbuffer
         byte[] buffer = new byte[1024 * 1024];
         //解压时字节计数
         int count = 0;
+        MLog.d(TAG, "zipEntry " + (zipEntry != null));
         //如果进入点为空说明已经遍历完所有压缩包中文件和目录
         while (zipEntry != null)
         {
-            //如果是一个目录
             if (zipEntry.isDirectory())
             {
                 file = new File(outputDirectory + File.separator + zipEntry.getName());
@@ -244,9 +230,8 @@ public class NativeHelper
             }
             else
             {
-                //如果是文件
-                file = new File(outputDirectory + File.separator
-                        + zipEntry.getName());
+                MLog.d(TAG, zipEntry.getName());
+                file = new File(outputDirectory + File.separator + zipEntry.getName());
                 //文件需要覆盖或者文件不存在，则解压文件
                 if (isReWrite || !file.exists())
                 {
@@ -259,7 +244,6 @@ public class NativeHelper
                     fileOutputStream.close();
                 }
             }
-            //定位到下一个文件入口
             zipEntry = zipInputStream.getNextEntry();
         }
         zipInputStream.close();

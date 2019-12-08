@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine.UI;
 using System.Runtime.InteropServices;
 using System;
+using UnityEngine.Networking;
 
 public class Main : MonoBehaviour
 {
@@ -27,9 +28,9 @@ public class Main : MonoBehaviour
         var txt = File.ReadAllText(path);
         Debug.Log(txt);
 #endif
-       
+
     }
-    
+
 
     private void OnGUI()
     {
@@ -61,35 +62,44 @@ public class Main : MonoBehaviour
             string txt = Android.LoadSteamString(file);
             Debug.Log(txt);
         }
-        if (GUI.Button(new Rect(60, 310, 140, 40), "Unzip"))
+        if (GUI.Button(new Rect(60, 310, 140, 40), "UnZip"))
         {
-            string src = Application.streamingAssetsPath;
-            src = Path.Combine(src, "lua.zip");
-            Debug.Log(src);
-            Android.UnZip(src, Application.persistentDataPath);
+            Android.UnZip("lua.zip");
         }
 #endif
     }
 
     IEnumerator GifHander()
     {
-        WWW www = new WWW(gif);
-        yield return www;
-        string path = Application.temporaryCachePath + "/" + gif.GetHashCode() + ".jpg";
-        Debug.Log("save path:" + path);
-        NativeBridge.sington.NToJPG(path, www.bytes);
-        Debug.Log("trans jpg finish! path:" + path);
+        using (UnityWebRequest www = UnityWebRequest.Get(gif))
+        {
+            yield return www.SendWebRequest();
+            if (www.isNetworkError)
+            {
+                Debug.Log(www.error);
+            }
+            else
+            {
+                // Show results as text
+                Debug.Log(www.downloadHandler.text);
 
-        m_Tex = new Texture2D(100, 100);
+                string path = Application.temporaryCachePath + "/" + gif.GetHashCode() + ".jpg";
+                Debug.Log("save path:" + path);
+                
+                NativeBridge.sington.NToJPG(path, www.downloadHandler.data);
+                Debug.Log("trans jpg finish! path:" + path);
+
+                m_Tex = new Texture2D(100, 100);
 #if UNITY_EDITOR
-        m_Tex = Resources.Load<Texture2D>("Icon-180");
+                m_Tex = Resources.Load<Texture2D>("Icon-180");
 #else
-        m_Tex.LoadImage(File.ReadAllBytes(path));
+                m_Tex.LoadImage(File.ReadAllBytes(path));
 #endif
-        Sprite tempSprite = Sprite.Create(m_Tex, new Rect(0, 0, m_Tex.width, m_Tex.height), Vector2.zero);
-        m_imgObj.GetComponent<Image>().sprite = tempSprite;
+                Sprite tempSprite = Sprite.Create(m_Tex, new Rect(0, 0, m_Tex.width, m_Tex.height), Vector2.zero);
+                m_imgObj.GetComponent<Image>().sprite = tempSprite;
+            }
 
-        www.Dispose();
+        }
     }
 
 
