@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -24,6 +25,9 @@ public class NativeHelper
     private static Activity gameActivity = null;
     private static Context gameContext = null;
     private final static String TAG = "XNativeHelper";
+
+    // Vector is multi thread safe array
+    private static Vector<String> zipState = null;
 
     public static native void SetAssetManager(AssetManager assetManager);
 
@@ -39,19 +43,42 @@ public class NativeHelper
     public static float GetMemory()
     {
         float memory = -1;
-        try
-        {
+        try {
             int pid = android.os.Process.myPid();
             ActivityManager mActivityManager = (ActivityManager) gameActivity.getSystemService(Context.ACTIVITY_SERVICE);
             Debug.MemoryInfo[] memoryInfoArray = mActivityManager.getProcessMemoryInfo(new int[]{pid});
             memory = (float) memoryInfoArray[0].getTotalPrivateDirty() / 1024;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             MLog.e(TAG, e.toString());
         }
         return memory;
     }
+
+//    public static void main(String[] args)
+//    {
+//        if (zipState == null)
+//            zipState = new Vector<String>();
+//        for (int i = 0; i < 20; i++) {
+//            final int finalI = i;
+//            new Thread()
+//            {
+//                public void run()
+//                {
+//                    System.out.println("thread "+finalI);
+//                    zipState.add("state" + finalI);
+//                }
+//            }.start();
+//        }
+//        System.out.println("start");
+//        while (true)
+//        {
+//            boolean ext = zipState.contains("state13");
+//            System.out.println(ext);
+//            if (ext)
+//                break;
+//        }
+//    }
 
 
     /*
@@ -60,21 +87,17 @@ public class NativeHelper
     public static int CopyStreamingAsset(String src, String dst)
     {
         File dir = new File(dst);
-        if (!dir.exists() || !dir.isDirectory())
-        {
+        if (!dir.exists() || !dir.isDirectory()) {
             dir.mkdir();
         }
         File file = new File(dir, src);
-        try
-        {
-            if (gameContext == null)
-            {
+        try {
+            if (gameContext == null) {
                 MLog.e(TAG, "CONTEXT IS NULL");
                 return -1;
             }
             InputStream is = gameContext.getAssets().open(src);
-            if (!is.markSupported())
-            {
+            if (!is.markSupported()) {
                 MLog.e(TAG, "Input is NULL");
                 return -2;
             }
@@ -82,16 +105,14 @@ public class NativeHelper
             byte[] buffer = new byte[1024];
             int len;
 
-            while ((len = is.read(buffer)) != -1)
-            {
+            while ((len = is.read(buffer)) != -1) {
                 os.write(buffer, 0, len);
             }
             os.flush();
             os.close();
             is.close();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             MLog.e(TAG, e.getMessage());
             return -3;
         }
@@ -103,37 +124,29 @@ public class NativeHelper
     {
         InputStream instream = null;
         ByteArrayOutputStream outStream = null;
-        try
-        {
+        try {
             instream = gameContext.getAssets().open(path);
             outStream = new ByteArrayOutputStream();
             byte[] bytes = new byte[4 * 1024];
             int len;
-            while ((len = instream.read(bytes)) != -1)
-            {
+            while ((len = instream.read(bytes)) != -1) {
                 outStream.write(bytes, 0, len);
             }
             return outStream.toByteArray();
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             MLog.e(TAG, e.getMessage());
         }
-        finally
-        {
-            try
-            {
-                if (instream != null)
-                {
+        finally {
+            try {
+                if (instream != null) {
                     instream.close();
                 }
-                if (outStream != null)
-                {
+                if (outStream != null) {
                     outStream.close();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 MLog.e(TAG, e.getMessage());
             }
             System.gc();
@@ -144,64 +157,60 @@ public class NativeHelper
     public static String LoadSteamString(String path)
     {
         InputStream ins = null;
-        try
-        {
+        try {
             ins = gameContext.getAssets().open(path);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             int idx = -1;
-            while ((idx = ins.read()) != -1)
-            {
+            while ((idx = ins.read()) != -1) {
                 os.write(idx);
             }
             return os.toString();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             MLog.e(TAG, e.getMessage());
         }
-        finally
-        {
-            try
-            {
-                if (ins != null)
-                {
+        finally {
+            try {
+                if (ins != null) {
                     ins.close();
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 MLog.e(TAG, e.getMessage());
             }
         }
         return "";
     }
 
+    public static boolean ZipState(String asset)
+    {
+        return zipState.contains(asset);
+    }
+
     public static void UnZip(final String asset, final String output, final boolean isReWrite)
     {
+        if (zipState == null)
+            zipState = new Vector<String>();
         new Thread()
         {
             public void run()
             {
-                try
-                {
+                try {
                     UnZipAssets(asset, output, isReWrite);
                 }
-                catch (IOException e)
-                {
+                catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }.start();
     }
 
-    private static void UnZipAssets(String assetName,
-                                    String outputDirectory, boolean isReWrite) throws IOException
+    private static void UnZipAssets(String assetName, String outputDirectory, boolean isReWrite) throws IOException
     {
         //创建解压目标目录
         File file = new File(outputDirectory);
         //如果目标目录不存在，则创建
-        if (!file.exists())
-        {
+        if (!file.exists()) {
             file.mkdirs();
         }
         InputStream inputStream = gameContext.getAssets().open(assetName);
@@ -212,28 +221,22 @@ public class NativeHelper
         //解压时字节计数
         int count = 0;
         //如果进入点为空说明已经遍历完所有压缩包中文件和目录
-        while (zipEntry != null)
-        {
-            if (zipEntry.isDirectory())
-            {
+        while (zipEntry != null) {
+            if (zipEntry.isDirectory()) {
                 file = new File(outputDirectory + File.separator + zipEntry.getName());
                 //文件需要覆盖或者是文件不存在
-                if (isReWrite || !file.exists())
-                {
+                if (isReWrite || !file.exists()) {
                     file.mkdir();
                 }
             }
-            else
-            {
+            else {
                 MLog.d(TAG, zipEntry.getName());
                 file = new File(outputDirectory + File.separator + zipEntry.getName());
                 //文件需要覆盖或者文件不存在，则解压文件
-                if (isReWrite || !file.exists())
-                {
+                if (isReWrite || !file.exists()) {
                     file.createNewFile();
                     FileOutputStream fileOutputStream = new FileOutputStream(file);
-                    while ((count = zipInputStream.read(buffer)) > 0)
-                    {
+                    while ((count = zipInputStream.read(buffer)) > 0) {
                         fileOutputStream.write(buffer, 0, count);
                     }
                     fileOutputStream.close();
@@ -243,5 +246,6 @@ public class NativeHelper
         }
         zipInputStream.close();
         inputStream.close();
+        zipState.add(assetName);
     }
 }
