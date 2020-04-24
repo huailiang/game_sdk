@@ -101,18 +101,5 @@ public class MainActivity extends UnityPlayerActivity
         WeiXinSdk.getInstance().SendWebPage(false, message);
     }
 
-    public void ShinActivityFinish(String message)
-    {
-        MLog.d(TAG, "ShinActivityFinish: " + message);
-        this.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                MainActivity.this.finish();
-            }
-        });
-    }
-
 
 }
