@@ -5,6 +5,9 @@ import android.os.Bundle;
 
 import com.unity3d.player.UnityPlayerActivity;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 public class MainActivity extends UnityPlayerActivity
 {
 
@@ -47,59 +50,36 @@ public class MainActivity extends UnityPlayerActivity
     public void initAllSdk()
     {
         MLog.d(TAG, "INIT SDK");
-        WeiXinSdk.getInstance().setGameActivity(this);
-        WeiXinSdk.getInstance().RegisterAppToWX(mContext);
         NativeHelper.setGameActivity(this, mContext);
         SystemInfo.getInstance().SetContext(mContext);
+        MClipboard.setGameActivity(this, mContext);
+        LiteWebView.setGameActivity(this);
     }
 
-    public void WeixinMessageShare(String message)
+    public boolean Call(String gameObjectName, String functionName, String args)
     {
-        MLog.d(TAG, "WeixinShare: " + message);
-        WeiXinSdk.getInstance().SendMessageToWX(true);
-    }
+        try {
+            Class<?> classtype = Class.forName("com.unity3d.player.UnityPlayer");
+            Method method = classtype.getMethod("UnitySendMessage", String.class, String.class, String.class);
+            method.invoke(classtype, gameObjectName, functionName, args);
+            return true;
+        }
+        catch (ClassNotFoundException e) {
+            MLog.e(TAG, e.getMessage());
 
-    public void WeixinShareMessageToFriend(String message)
-    {
-        MLog.d(TAG, "WeixinShareToFriend: " + message);
-        WeiXinSdk.getInstance().SendMessageToWX(false);
-    }
+        }
+        catch (NoSuchMethodException e) {
+            MLog.e(TAG, e.getMessage());
 
-    public void WeixinAppShare(String message)
-    {
-        MLog.d(TAG, "WeixinAppShare: " + message);
-        WeiXinSdk.getInstance().SendAppData(true, message);
-    }
+        }
+        catch (IllegalAccessException e) {
+            MLog.e(TAG, e.getMessage());
 
-    public void WeixinShareAppToFriend(String message)
-    {
-        MLog.d(TAG, "WeixinShareAppToFriend: " + message);
-        WeiXinSdk.getInstance().SendAppData(false, message);
+        }
+        catch (InvocationTargetException e) {
+            MLog.e(TAG, e.getMessage());
+        }
+        return false;
     }
-
-    public void WeixinImageShare(String message)
-    {
-        MLog.d(TAG, "WeixinImageShare: " + message);
-        WeiXinSdk.getInstance().SendBitmapToWX(true, message);
-    }
-
-    public void WeixinShareImageToFriend(String message)
-    {
-        MLog.d(TAG, "WeixinShareImageToFriend: " + message);
-        WeiXinSdk.getInstance().SendBitmapToWX(false, message);
-    }
-
-    public void WeixinWebPageShare(String message)
-    {
-        MLog.d(TAG, "WeixinWebPageShare: " + message);
-        WeiXinSdk.getInstance().SendWebPage(true, message);
-    }
-
-    public void WeixinShareWebPageToFriend(String message)
-    {
-        MLog.d(TAG, "WeixinShareWebPageToFriend: " + message);
-        WeiXinSdk.getInstance().SendWebPage(false, message);
-    }
-
 
 }

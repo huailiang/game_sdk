@@ -4,34 +4,24 @@
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8" />
-    
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
-    <uses-permission android:name="android.permission.READ_LOGS" />
-	<uses-permission android:name="android.permission.SEND_SMS" />
-	<uses-permission android:name="android.permission.CALL_PHONE" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
- 
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
-	<uses-permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER"/>
-	<uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
-    
-	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-	<uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<!-- 网络通信 -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<!-- 获取网络状态 -->
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<!-- 获取mac地址 -->
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+	<!-- 获取logcat -->
+	<uses-permission android:name="android.permission.READ_LOGS" />
+	<!-- 获取设备信息 -->
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.GET_TASKS"/>
     
-    <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:debuggable="false">
+    <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:debuggable="false" android:usesCleartextTraffic="true">
 
         <activity android:name="com.sdk.MainActivity"
                     android:label="@string/app_name"
@@ -40,18 +30,10 @@
                     android:screenOrientation="landscape" 
                     android:configChanges="keyboardHidden|orientation"
                     >
-		  <intent-filter>
+		      <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
           </intent-filter>
-        </activity>
-        
-		
-        <activity android:name="com.perfectworld.cfgame.wxapi.WXEntryActivity"
-                  android:exported="true"    
-                  android:screenOrientation="landscape"
-                  android:theme="@android:style/Theme.NoDisplay"	
-            	>
         </activity>
                
 

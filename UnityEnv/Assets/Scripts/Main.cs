@@ -5,22 +5,32 @@ using UnityEngine.UI;
 using System.Runtime.InteropServices;
 using System;
 using UnityEngine.Networking;
+using LiteWebView;
 
 public class Main : MonoBehaviour
 {
 
     const string gif = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497885550184&di=48b9289901fcd8c5dfa773873d9e6b00&imgtype=0&src=http%3A%2F%2Fimage.manyule.com%2Fbbs%2Fdata%2Fattachment%2Fforum%2F201508%2F04%2F160054selefffv3cgxfelx.gif";
-
+    private static string text = "hello world";
     public GameObject m_imgObj;
     private string texname;
     private Texture2D m_Tex;
     public Text m_info;
+    private string tex;
+    private WebView webView;
+
+    private GUIStyle statu;
 
     void Start()
     {
         Debug.Log(Application.streamingAssetsPath);
 
         string path = Application.streamingAssetsPath + "/test.txt";
+        webView = gameObject.AddComponent<WebView>();
+        webView.Init();
+
+        statu = new GUIStyle();
+        statu.fontSize = 32;
 
 #if UNITY_ANDROID && !UNITY_EDITOR
        // do nothing
@@ -34,6 +44,7 @@ public class Main : MonoBehaviour
 
     private void OnGUI()
     {
+        GUI.Label(new Rect(210, 10, 100, 80), text, statu);
         if (GUI.Button(new Rect(60, 10, 140, 40), "像素密度"))
         {
             int density = NativeBridge.sington.NGetDensity();
@@ -67,6 +78,34 @@ public class Main : MonoBehaviour
             Android.UnZip("lua.zip");
         }
 #endif
+        GUIWebview();
+    }
+
+
+    private void GUIWebview()
+    {
+        float left = 200;
+        tex = GUI.TextField(new Rect(left, 100, 360, 60), tex);
+        left += 200;
+        if (GUI.Button(new Rect(left + 200, 100, 120, 70), "load"))
+        {
+            webView.Show(200, 0, 0, 0);
+            webView.LoadUrl(tex);
+        }
+        if (GUI.Button(new Rect(left + 150, 10, 100, 70), "loadhtm"))
+        {
+            webView.RegistJsInterfaceAction("ShowMsg", ShowMsg);
+            webView.Show(160, 0, 0, 0);
+            webView.LoadLocal("/litewebview_test.html");
+        }
+        if (GUI.Button(new Rect(left + 300, 10, 100, 80), "calljs"))
+        {
+            webView.CallJS("callJS", "https://youku.com/");
+        }
+        if (GUI.Button(new Rect(left + 450, 10, 100, 80), "close"))
+        {
+            webView.Close();
+        }
     }
 
     IEnumerator GifHander()
@@ -127,6 +166,11 @@ public class Main : MonoBehaviour
                 NativeRead.ReleaseBytes(ptr);
             }
         }
+    }
+
+    void ShowMsg(string info)
+    {
+        text = info;
     }
 
 }

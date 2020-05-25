@@ -28,6 +28,8 @@ public class NativeHelper
 
     // Vector is multi thread safe array
     private static Vector<String> zipState = null;
+    private static Vector<String> failedState = null;
+    private static Vector<String> failedDesc = null;
 
     public static native void SetAssetManager(AssetManager assetManager);
 
@@ -54,31 +56,6 @@ public class NativeHelper
         }
         return memory;
     }
-
-//    public static void main(String[] args)
-//    {
-//        if (zipState == null)
-//            zipState = new Vector<String>();
-//        for (int i = 0; i < 20; i++) {
-//            final int finalI = i;
-//            new Thread()
-//            {
-//                public void run()
-//                {
-//                    System.out.println("thread "+finalI);
-//                    zipState.add("state" + finalI);
-//                }
-//            }.start();
-//        }
-//        System.out.println("start");
-//        while (true)
-//        {
-//            boolean ext = zipState.contains("state13");
-//            System.out.println(ext);
-//            if (ext)
-//                break;
-//        }
-//    }
 
 
     /*
@@ -182,15 +159,59 @@ public class NativeHelper
         return "";
     }
 
-    public static boolean ZipState(String asset)
+    public static int ZipState(String asset)
     {
-        return zipState.contains(asset);
+        synchronized (failedState) {
+            if (failedState.contains(asset))
+                return -1;
+        }
+        synchronized (zipState) {
+            return zipState.contains(asset) ? 1 : 0;
+        }
+    }
+
+    public static String GetFailDescription(String asset)
+    {
+        synchronized (failedState) {
+            synchronized (failedDesc) {
+                for (int i = 0; i < failedState.size(); i++) {
+                    if (failedState.get(i) == asset) {
+                        return failedDesc.get(i);
+                    }
+                }
+                return "";
+            }
+        }
+    }
+
+    private static void SetupZipState(final String asset)
+    {
+        if (zipState == null) {
+            zipState = new Vector<>();
+        }
+        if (failedDesc == null) {
+            failedDesc = new Vector<>();
+        }
+        if (failedState == null) {
+            failedState = new Vector<>();
+        }
+
+        if (zipState.contains(asset)) // 针对验证失败, 需要重新解压的情况
+        {
+            zipState.remove(asset);
+        }
+        if (failedState.contains(asset)) {
+            failedState.remove(asset);
+        }
+        if (failedDesc.contains(asset)) {
+            failedDesc.remove(asset);
+        }
     }
 
     public static void UnZip(final String asset, final String output, final boolean isReWrite)
     {
-        if (zipState == null)
-            zipState = new Vector<String>();
+        SetupZipState(asset);
+
         new Thread()
         {
             public void run()
@@ -200,6 +221,12 @@ public class NativeHelper
                 }
                 catch (IOException e) {
                     e.printStackTrace();
+                    synchronized (failedState) {
+                        failedState.add(asset);
+                    }
+                    synchronized (failedDesc) {
+                        failedDesc.add(e.getMessage());
+                    }
                 }
             }
         }.start();
@@ -246,6 +273,8 @@ public class NativeHelper
         }
         zipInputStream.close();
         inputStream.close();
-        zipState.add(assetName);
+        synchronized (zipState) {
+            zipState.add(assetName);
+        }
     }
 }
