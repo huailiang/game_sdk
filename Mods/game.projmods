@@ -2,6 +2,7 @@
     "group": "Mods",
     "libs": [],
     "frameworks": [ "StoreKit.framework",
+                    "WebKit.framework:optional",
     				"CoreTelephony.framework"],
     "headerpaths": [],                    
     "files":   [],
