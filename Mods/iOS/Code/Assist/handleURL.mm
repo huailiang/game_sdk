@@ -190,7 +190,6 @@ static int exception_callback_handler()
 #ifdef SYS_IOS
 
 #if defined PLATFORM_ID_TENCENT
-    // NSLog(@"JoyYou-TencentMSDK ::: Register remote notifications succeeded with deviceToken: %@", deviceToken);
     [MSDKXG WGSuccessedRegisterdAPNSWithToken:deviceToken];
 #else
 
@@ -204,7 +203,7 @@ static int exception_callback_handler()
 #ifdef SYS_IOS
 
 #if defined PLATFORM_ID_TENCENT
-	NSLog(@"JoyYou-TencentMSDK ::: Register remote notifications failed with error: %@", [error description]);
+	NSLog(@"CFSDK ::: Register remote notifications failed with error: %@", [error description]);
 	[MSDKXG WGFailedRegisteredAPNS];
 #endif
 
@@ -224,7 +223,7 @@ static int exception_callback_handler()
 
 #ifdef PLATFORM_ID_TENCENT
     // 处理本地推送消息
-    // NSLog(@"JoyYou-TencentMSDK ::: 收到本地推送消息: %@ %@", notification.alertBody, notification.userInfo);
+    // NSLog(@"CFSDK ::: 收到本地推送消息: %@ %@", notification.alertBody, notification.userInfo);
 
     LocalMessage message;
 
@@ -254,9 +253,8 @@ static int exception_callback_handler()
     
 #if defined PLATFORM_ID_TENCENT
     // 处理远程推送消息
-    // NSLog(@"JoyYou-TencentMSDK ::: userinfo: %@", userInfo);
-
-    // NSLog(@"JoyYou-TencentMSDK ::: 收到推送消息: %@", [[userInfo objectForKey:@"aps"] objectForKey:@"alert"]);
+    // NSLog(@"TencentMSDK ::: userinfo: %@", userInfo);
+    // NSLog(@"TencentMSDK ::: 收到推送消息: %@", [[userInfo objectForKey:@"aps"] objectForKey:@"alert"]);
 
     // 接收消息
     [MSDKXG WGReceivedMSGFromAPNSWithDict:userInfo];
@@ -306,7 +304,7 @@ static int exception_callback_handler()
         CGPoint touchPoint = [touch locationInView:[[UIApplication sharedApplication] keyWindow].rootViewController.view];
         // float touchX = touchPoint.x;
         // float touchY = touchPoint.y;
-        // NSLog(@"JoyYouSDK ::: current touch location is: x = %f && y = %f", touchX, touchY);
+        // NSLog(@"CFSDK ::: current touch location is: x = %f && y = %f", touchX, touchY);
 
         CGFloat currentForce = touch.force;
         CGFloat baseForce = touch.maximumPossibleForce * 0.8;
