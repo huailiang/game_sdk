@@ -4,6 +4,8 @@ unity 游戏sdk相关架构设计
 
 包含xupoter和android java 等native层面的代码
 
+集成webview, ios支持uiwebview和wkwebview根据ios系统自由切换
+
 ## IOS
 
 自己实现一套生成postbuild去修改xcode里的设置选项 bitcode https, 不同版本的utniy可能需要略作修改。
