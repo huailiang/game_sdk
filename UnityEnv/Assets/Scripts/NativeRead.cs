@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+#if UNITY_ANDROID
+
 public class NativeRead
 {
 #if UNITY_IOS
@@ -27,3 +29,4 @@ public class NativeRead
     public static extern void ReleaseBytes(IntPtr ptr);
 
 }
+#endif

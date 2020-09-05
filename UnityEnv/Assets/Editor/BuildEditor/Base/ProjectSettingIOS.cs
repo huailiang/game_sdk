@@ -246,7 +246,7 @@ namespace UnityEditor.XBuild
 
             // openURL接口
             UnityAppController.WriteBelow("AppController_SendNotificationWithArg(kUnityOnOpenURL, notifData);",
-                "\t[SDKProcess application:application openURL:url sourceApplication:sourceApplication annotation:annotation];");
+                "\t[SDKProcess application:app openURL:url sourceApplication:sourceApplication annotation:annotation];");
 
             // didFinishLaunchingWithOptions接口
             UnityAppController.WriteBelow("::printf(\"-> applicationDidFinishLaunching()\\n\");",
@@ -263,22 +263,6 @@ namespace UnityEditor.XBuild
             // applicationDidBecomeActive接口
             UnityAppController.WriteBelow("_didResignActive = false;",
                 "\t[SDKProcess applicationDidBecomeActive:application];");
-        }
-
-
-
-        public static void AddExtCode_HandleURL_Extend(string pathToBuiltProject)
-        {
-            XClass UnityAppController = new XClass(pathToBuiltProject + "/Classes/UnityAppController.mm");
-            UnityAppController.WriteBelow("SensorsCleanup();\n}",
-    @"
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
-{
-	// [SDKProcess application:application handleOpenURL:url];
-	[SDKProcess application:application openURL:url sourceApplication:nil annotation:(id)0];
-
-	return YES;
-}");
         }
 
 

@@ -38,7 +38,6 @@ public class Main : MonoBehaviour
         var txt = File.ReadAllText(path);
         Debug.Log(txt);
 #endif
-
     }
 
 
@@ -144,6 +143,7 @@ public class Main : MonoBehaviour
 
     public void NDKRead(string file)
     {
+#if UNITY_ANDROID
         Debug.Log("add result: " + NativeRead.Add(2, 45));
 
         MemoryStream stream = new MemoryStream();
@@ -166,6 +166,7 @@ public class Main : MonoBehaviour
                 NativeRead.ReleaseBytes(ptr);
             }
         }
+#endif
     }
 
     void ShowMsg(string info)

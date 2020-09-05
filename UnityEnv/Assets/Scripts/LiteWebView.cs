@@ -5,13 +5,11 @@ using UnityEngine;
 
 namespace LiteWebView
 {
-
     public class WebView : MonoBehaviour
     {
-
         Lite4Platform _ulite;
         Dictionary<string, Action<String>> _jsActions = new Dictionary<string, Action<string>>();
-        
+
         public event Action<string> onLoadingUrl;
 
         public void Init()
@@ -70,7 +68,7 @@ namespace LiteWebView
 #endif
             LoadUrl(filePath);
         }
-        
+
 
         public void Close()
         {
@@ -127,11 +125,11 @@ namespace LiteWebView
             }
             catch (Exception e)
             {
-                Debug.Log(string.Format("LiteWebView：Wrong JS Msg [{0}]", msg));
+                Debug.Log($"LiteWebView：Wrong JS Msg [{e.Message}]");
             }
         }
 
-        
+
         /// <summary>
         /// 注册供JS调用的方法
         /// </summary>
@@ -155,7 +153,7 @@ namespace LiteWebView
                 _jsActions.Remove(interfaceName);
             }
         }
-        
+
         /// <summary>
         /// 获取GameObject的完整路径名
         /// </summary>
@@ -170,8 +168,7 @@ namespace LiteWebView
                 {
                     fullName = temp.name + "/" + fullName;
                 }
-            }
-            while (temp != null);
+            } while (temp != null);
             return fullName;
         }
     }
@@ -190,7 +187,7 @@ namespace LiteWebView
     class LiteAndroidWebView : Lite4Platform
     {
         AndroidJavaObject _ajo;
-        
+
         public LiteAndroidWebView(string gameObjectName)
         {
             _ajo = new AndroidJavaObject("com.sdk.LiteWebView");

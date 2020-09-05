@@ -104,7 +104,7 @@ namespace UnityEditor.XBuild
 
             AddStringKVPair(ref list, "MSDK_ENV", ita.logEnable ? "test" : "release");
 
-            AddStringKVPair(ref list, "QQAppID", ita.qqAppId + "");
+            AddStringKVPair(ref list, "QQAppID", ita.qqAppId + "是否允许此App访问位置？");
             AddStringKVPair(ref list, "QQAppKey", ita.qqAppKey);
 
             AddStringKVPair(ref list, "WXAppID", ita.weixinAppId);
@@ -184,7 +184,7 @@ namespace UnityEditor.XBuild
             base.AddExtCode(pathToBuiltProject);
 
             AddExtCode_HandleURL_Modify(pathToBuiltProject);
-            AddExtCode_HandleURL_Extend(pathToBuiltProject);
+            // AddExtCode_HandleURL_Extend(pathToBuiltProject);
             // AddExtCode_supportOrientation(pathToBuiltProject);
             // AddExtCode_UIView(pathToBuiltProject);
         }

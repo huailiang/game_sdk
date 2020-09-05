@@ -1,21 +1,9 @@
 #import <WebKit/WebKit.h>
 
-
-#define GREATER_IOS8 (__IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0)
-
 @interface LiteWebView :
-#if GREATER_IOS8
 NSObject<WKNavigationDelegate>
-#else
-NSObject<UIWebViewDelegate>
-#endif
 {
-#if GREATER_IOS8
     WKWebView* _webView;
-#else
-    UIWebView* _webView;
-#endif
-    
     NSString* _gameObjectName;
 }
 @end
@@ -30,13 +18,9 @@ NSObject<UIWebViewDelegate>
     if(_webView == nil){
         UIView* view = UnityGetGLViewController().view;
         
-#if GREATER_IOS8
         _webView = [[WKWebView alloc] initWithFrame:view.frame];
         _webView.navigationDelegate = self;
-#else
-        _webView = [[UIWebView alloc] initWithFrame:view.frame];
-        _webView.delegate = self;
-#endif
+
         _webView.hidden = YES;
         [view addSubview:_webView];
     }
@@ -44,11 +28,7 @@ NSObject<UIWebViewDelegate>
 
 - (void)disposeWebView{
     if(_webView != nil){
-#if GREATER_IOS8
         _webView.navigationDelegate = nil;
-#else
-        _webView.delegate = nil;
-#endif
         [_webView removeFromSuperview];
         _webView = nil;
     }
@@ -94,11 +74,7 @@ NSObject<UIWebViewDelegate>
     }
     NSString *jsStr= [NSString stringWithFormat:@"%s(\"%s\")",funName,msg];
 
-#if GREATER_IOS8
     [_webView evaluateJavaScript:jsStr completionHandler:nil];
-#else
-    [_webView stringByEvaluatingJavaScriptFromString:jsStr];
-#endif
 }
 
 //捕获链接请求
@@ -139,7 +115,6 @@ extern "C"
         
         ulite = [LiteWebView alloc];
         [ulite init:gameObjectName];
-//        NSLog(@"_registResponseGameObject");
     }
 
     void _show(int top, int bottom, int left, int right){
